@@ -1,2 +1,6 @@
 export * from './Scatter'
 export * from './ScatterUser'
+export * from './Scatter.test'
+export * from './scatterLogo'
+export * from './UALScatterError'
+export * from './interfaces'
