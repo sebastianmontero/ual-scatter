@@ -2,6 +2,7 @@ import { Api, JsonRpc } from 'eosjs'
 import * as ecc from 'eosjs-ecc'
 import { Chain, SignTransactionResponse, UALErrorType, User } from 'universal-authenticator-library'
 import { UALScatterError } from './UALScatterError'
+import { Cosigner, CosignAuthorityProvider } from 'eos-cosigner-lib'
 
 export class ScatterUser extends User {
   private api: Api
@@ -13,6 +14,7 @@ export class ScatterUser extends User {
   constructor(
     private chain: Chain,
     private scatter: any,
+    private cosigner: Cosigner
   ) {
     super()
     const rpcEndpoint = this.chain.rpcEndpoints[0]
@@ -27,6 +29,9 @@ export class ScatterUser extends User {
     }
     const rpc = this.rpc
     this.api = this.scatter.eos(network, Api, { rpc, beta3: true })
+
+    if(this.cosigner)
+      this.api.authorityProvider = new CosignAuthorityProvider(this.rpc, this.cosigner)
   }
 
   public async signTransaction(
