@@ -17,7 +17,6 @@ export class Scatter extends Authenticator {
   private appName: string
   private scatterIsLoading: boolean = false
   private initError: UALError | null = null
-  private cosigner?: any
 
   /**
    * Scatter Constructor.
@@ -29,10 +28,6 @@ export class Scatter extends Authenticator {
     super(chains)
     if (options && options.appName) {
       this.appName = options.appName
-      if(options.cosigner)
-        this.cosigner = options.cosigner
-      else
-        this.cosigner = undefined
     } else {
       throw new UALScatterError('Scatter requires the appName property to be set on the `options` argument.',
         UALErrorType.Initialization,
@@ -112,7 +107,7 @@ export class Scatter extends Authenticator {
 
     try {
       for (const chain of this.chains) {
-        const user = new ScatterUser(chain, this.scatter, this.cosigner)
+        const user = new ScatterUser(chain, this.scatter)
         await user.getKeys()
         this.users.push(user)
       }
